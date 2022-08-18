@@ -1,0 +1,35 @@
+[package]
+name = "sample-rust-cdk-app"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = "^0.1"
+base64 = "0.13"
+futures = { version = "^0.3" }
+reqwest = { version = "0.11.11", default-features = false, features = ["rustls-tls", "json"] }
+serde = "^1.0"
+serde_json = "^1.0"
+time = "0.3.7"
+tokio = { version = "1.19.2", features = ["rt-multi-thread", "macros"] }
+tracing = { version = "0.1.30", features = ["log"] }
+tracing-subscriber = { version = "0.3.8", features = ["env-filter"] }
+# NOTE: the following crate is not part of the SDK, but it is maintained by AWS.
+lambda_runtime = "0.6.0"
+# We are using the Amazon Simple Storage Service (Amazon S3) crate in this example,
+# but you can use any SDK crate in your Lambda code.
+aws-config = "0.46.0"
+aws-types = "0.46.0"
+aws-sdk-sesv2 = "0.16.0"
+aws-sdk-secretsmanager = "0.16.0"
+
+[dev-dependencies]
+serde_json = "1.0.83"
+sensible-env-logger = { version = "^0.3", features = ["local-time"] }
+toml = "0.5.9"
+
+[features]
+dev  = []  # feature has no explicit dependencies
+prod = []  # feature has no explicit dependencies

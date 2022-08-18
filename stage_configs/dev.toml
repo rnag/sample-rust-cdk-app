@@ -1,0 +1,13 @@
+[env]
+account = "1234567890"  # TODO
+region = "us-east-1"
+name = "dev"
+type = "dev"
+
+[secrets]
+admin_user = "my/admin"
+creds = "my/user"
+
+[vpc]
+id = "vpc-a1234567"
+security_group_id = "sg-0123"

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>My Title</title>
+</head>
+
+<style>
+    ul li {
+        line-height: 32px;
+        font-size: 18px;
+    }
+
+    ul li span {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    ul li:before{
+        content: '';
+        display: inline-block;
+        vertical-align: top;
+        height: 100%;
+    }
+</style>
+
+<body>
+<h2>Failure: Test for {{account.id}}</h2>
+<h3>Overview</h3>
+<ul>
+    <li><b>Account: </b><code>{{account.name}}</code></li>
+    <li><b>Secret Link: </b><a href="https://console.aws.amazon.com/secretsmanager/home?region=us-east-1#/secret?name={{secret_name}}">{{secret_name}}</a></li>
+    <li><b>Instructions: </b><a href="https://some-wiki-link.com">Instructions</a></li>
+</ul>
+
+{{#if links}}
+<h3>Helpful Links</h3>
+<ul>
+{{#each links}}
+    <li><a href="{{this.location}}">{{this.text}}</a></li>
+{{/each}}
+</ul>
+{{/if}}
+</br>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Typescript artifacts:
+dist
+out
+
+# Rust code and artifacts
+src
+examples
+target
+.build
+
+# CDK asset staging directory:
+.cdk.staging
+cdk.out
+
+# Miscellaneous files:
+.DS_Store
