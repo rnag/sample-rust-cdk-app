@@ -18,6 +18,9 @@ const SECRETS: Secrets = Secrets {
     creds: env!("CREDS_SECRET"),
 };
 
+const BUCKET: &str = env!("BUCKET_NAME");
+const UPLOAD_PATH: &str = env!("UPLOAD_PATH");
+
 #[tokio::main]
 async fn main() -> Result<()> {
     setup_logging();
@@ -37,6 +40,7 @@ pub(crate) async fn my_handler(event: LambdaEvent<DummyEvent>) -> Result<Success
     }
 
     let shared_config = aws_config::load_from_env().await;
+    let s3 = S3Helper::from(&shared_config);
 
     // let start = Instant::now();
     // let (admin, creds) = SECRETS.fetch(&shared_config).await?;
@@ -51,7 +55,14 @@ pub(crate) async fn my_handler(event: LambdaEvent<DummyEvent>) -> Result<Success
     #[cfg(not(feature = "prod"))]
     let message: [&str; 4] = ["just", "a", "development", "environment."];
 
-    println!("Message: {}", message.join(" "));
+    let message_str = message.join(" ");
+
+    trace!("Message: {message_str}");
+
+    let file_path = format!("{UPLOAD_PATH}/my-file.txt");
+    let _ = s3
+        .put_object(BUCKET, file_path, message_str.as_bytes())
+        .await?;
 
     // let client = reqwest_client(admin)?;
 
