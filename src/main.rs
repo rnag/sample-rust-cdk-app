@@ -38,9 +38,9 @@ pub(crate) async fn my_handler(event: LambdaEvent<DummyEvent>) -> Result<Success
 
     let shared_config = aws_config::load_from_env().await;
 
-    let start = Instant::now();
-    let (admin, creds) = SECRETS.fetch(&shared_config).await?;
-    info!("Retrieved secrets in {:?}", start.elapsed());
+    // let start = Instant::now();
+    // let (admin, creds) = SECRETS.fetch(&shared_config).await?;
+    // info!("Retrieved secrets in {:?}", start.elapsed());
 
     // optional feature flags as defined in `Cargo.toml`. this is enabled
     // in the CDK code in the `lib/` folder.
@@ -53,10 +53,9 @@ pub(crate) async fn my_handler(event: LambdaEvent<DummyEvent>) -> Result<Success
 
     println!("Message: {}", message.join(" "));
 
-    let client = reqwest_client(admin)?;
+    // let client = reqwest_client(admin)?;
 
     let success = true;
-
     // let failed = vec![];
     //
     // sample example of making parallel HTTP requests (WIP)

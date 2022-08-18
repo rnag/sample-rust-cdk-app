@@ -24,6 +24,10 @@ export interface StageConfig extends StackProps {
         [key: string]: string;
     };
     /**
+     * S3 Configuration
+     */
+    readonly s3: S3;
+    /**
      * VPC Configuration
      */
     readonly vpc: VPCConfig;
@@ -55,9 +59,20 @@ export interface SecretNames {
     /**
      * Admin User credentials
      */
-    readonly admin_user: string,
+    readonly admin_user: string;
     /**
      * Dummy credentials
      */
-    readonly creds: string,
+    readonly creds: string;
+}
+
+export interface S3 {
+    /**
+     * S3 Bucket Name
+     */
+    readonly bucket_name: string;
+    /**
+     * S3 Upload Path
+     */
+    readonly upload_path: string;
 }

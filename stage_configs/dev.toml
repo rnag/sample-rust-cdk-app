@@ -8,6 +8,10 @@ type = "dev"
 admin_user = "my/admin"
 creds = "my/user"
 
+[s3]
+bucket_name = "my-test-bucket-dev"  # TODO
+upload_path = "uploads"
+
 [vpc]
 id = "vpc-a1234567"
 security_group_id = "sg-0123"

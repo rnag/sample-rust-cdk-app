@@ -1,6 +1,11 @@
 import { Duration, Stack } from 'aws-cdk-lib';
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
+// import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import {
+    BlockPublicAccess,
+    Bucket,
+    BucketAccessControl,
+} from 'aws-cdk-lib/aws-s3';
 import * as sm from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import { RustFunction, Settings } from 'rust.aws-cdk-lambda';
@@ -16,6 +21,8 @@ export class SampleRustCDKAppStack extends Stack {
         super(scope, id, props);
 
         const envName = props.env.name;
+        const bucketName = props.s3.bucket_name;
+        const uploadPath = props.s3.upload_path;
         const secretNameAdmin = props.secrets.admin_user;
         const secretNameCreds = props.secrets.creds;
 
@@ -27,6 +34,8 @@ export class SampleRustCDKAppStack extends Stack {
         Settings.BUILD_ENVIRONMENT = {
             // TODO
             ACCOUNT_NAME: `aws-my-account-${envName}`,
+            BUCKET_NAME: bucketName,
+            UPLOAD_PATH: uploadPath,
             SES_SENDER: SES_IDENTITY,
             SOURCE_CODE: props.repository_url,
             ADMIN_SECRET: secretNameAdmin,
@@ -43,6 +52,17 @@ export class SampleRustCDKAppStack extends Stack {
             `smtp-secret-${envName}`,
             secretNameCreds
         );
+
+        const bucket = new Bucket(this, bucketName, {
+            bucketName: bucketName,
+            accessControl: BucketAccessControl.PRIVATE,
+            blockPublicAccess: new BlockPublicAccess({
+                blockPublicAcls: true,
+                blockPublicPolicy: true,
+                ignorePublicAcls: true,
+                restrictPublicBuckets: true,
+            }),
+        });
 
         // const vpc = ec2.Vpc.fromLookup(
         //     this,
@@ -72,6 +92,7 @@ export class SampleRustCDKAppStack extends Stack {
             retryAttempts: 0,
         });
 
+        bucket.grantReadWrite(myLambda);
         secretAdmin.grantRead(myLambda);
         secretCreds.grantRead(myLambda);
 
