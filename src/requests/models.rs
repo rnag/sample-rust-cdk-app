@@ -1,5 +1,7 @@
 use std::fmt;
+use std::str::FromStr;
 
+use reqwest::Url;
 use serde::Serialize;
 use serde_json::json;
 
@@ -16,11 +18,19 @@ pub struct RequestError {
 
 impl From<reqwest::Error> for RequestError {
     fn from(e: reqwest::Error) -> Self {
-        let url = e.url().unwrap();
+        let url = match e.url() {
+            None => Url::from_str("https://default-url.com").unwrap(),
+            Some(u) => u.clone(),
+        };
+        let status = match e.status() {
+            None => 400,
+            Some(s) => s.as_u16(),
+        };
+
         Self {
             url: url.to_string(),
             host: url.host_str().unwrap().to_owned(),
-            status: e.status().unwrap().as_u16(),
+            status,
             reason: e.without_url().to_string(),
         }
     }
